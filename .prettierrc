@@ -1,8 +1,0 @@
-{
-  "singleQuote": true,
-  "trailingComma": "all",
-  "printWidth": 160,
-  "jsxSingleQuote": true,
-  "bracketSpacing": true,
-  "bracketSameLine": false
-}

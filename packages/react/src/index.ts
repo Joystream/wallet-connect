@@ -1,1 +1,1 @@
-export * from './PolkadotWalletsContext.js';
+export * from './PolkadotWalletsContext.js'
