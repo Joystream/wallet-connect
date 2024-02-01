@@ -5,8 +5,8 @@ import Client, { SignClient } from '@walletconnect/sign-client'
 import type { SessionTypes } from '@walletconnect/types'
 
 import { WalletConnectSigner } from './signer.js'
-import { ConnectionModal, WalletConnectConfiguration, WcAccount } from './types.js';
-import { JOYSTREAM_CHAIN_ID, WC_VERSION } from './consts';
+import { ConnectionModal, WalletConnectConfiguration, WcAccount } from './types.js'
+import { JOYSTREAM_CHAIN_ID, POLKADOT_CHAIN_ID, WC_VERSION } from './consts'
 
 const toWalletAccount = (wcAccount: WcAccount) => ({ address: wcAccount.split(':')[2] })
 
@@ -21,7 +21,7 @@ class WalletConnectWallet implements BaseWallet {
   session: SessionTypes.Struct | undefined
 
   constructor(config: WalletConnectConfiguration, appName: string) {
-    if (!config.chainIds || config.chainIds.length === 0) config.chainIds = [JOYSTREAM_CHAIN_ID]
+    if (!config.chainIds || config.chainIds.length === 0) config.chainIds = [POLKADOT_CHAIN_ID]
     this.config = config
     this.appName = appName
     this.metadata = {
