@@ -3,6 +3,7 @@ import type { Account, BaseWallet, BaseWalletProvider, UnsubscribeFn, WalletMeta
 import type { Signer } from '@polkadot/types/types'
 import type { ExtensionConfiguration, WalletExtension } from './types.js'
 import { WalletType } from '@polkadot-onboard/core'
+import { defaultExtensionsConfig } from './injectionsConfig.js'
 
 const toWalletAccount = (account: InjectedAccount) => {
   return account as Account
@@ -73,8 +74,8 @@ export class InjectedWalletProvider implements BaseWalletProvider {
   supportedOnly: boolean
   appName: string
 
-  constructor(config: ExtensionConfiguration, appName: string, supportedOnly: boolean = false) {
-    this.config = config
+  constructor(appName: string, supportedOnly: boolean = false, overrideConfig?: ExtensionConfiguration) {
+    this.config = overrideConfig || defaultExtensionsConfig
     this.supportedOnly = supportedOnly
     this.appName = appName
   }

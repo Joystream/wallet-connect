@@ -14,6 +14,7 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
   const [api, setApi] = useState<ApiPromise | null>(null)
   const [isBusy, setIsBusy] = useState<boolean>(false)
 
+  console.log(wallet)
   const accountsWithWallet = accounts.map((account: any) => {
     return {
       ...account,

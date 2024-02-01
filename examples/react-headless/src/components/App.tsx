@@ -1,23 +1,22 @@
-import { WalletConnectConfiguration } from '@polkadot-onboard/wallet-connect'
 import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react'
 import { WalletAggregator } from '@polkadot-onboard/core'
 import { InjectedWalletProvider } from '@polkadot-onboard/injected-wallets'
-import { WalletConnectProvider } from '@polkadot-onboard/wallet-connect'
-import { extensionConfig } from '../extensionConfig'
-
-import Wallets from './Wallets'
+import { WalletConnectProvider, walletConnectParams } from '@polkadot-onboard/wallet-connect'
 import { useState } from 'react'
 
-const APP_NAME = 'Polkadot Demo'
+import Wallets from './Wallets'
+import { WalletConnectConfiguration } from '@polkadot-onboard/wallet-connect/dist';
+
+const APP_NAME = 'Joystream Demo app'
 
 const App = () => {
-  const injectedWalletProvider = new InjectedWalletProvider(extensionConfig, APP_NAME)
+
   const walletConnectParams: WalletConnectConfiguration = {
-    projectId: '4fae85e642724ee66587fa9f37b997e2',
+    projectId: '33b2609463e399daee8c51726546c8dd',
     relayUrl: 'wss://relay.walletconnect.com',
     metadata: {
-      name: 'Polkadot Demo',
-      description: 'Polkadot Demo',
+      name: 'Joystream demo app',
+      description: 'Joystream Wallet-Connect',
       url: '#',
       icons: ['https://walletconnect.com/walletconnect-logo.png'],
     },
@@ -27,6 +26,8 @@ const App = () => {
       // do something when session is removed
     },
   }
+
+  const injectedWalletProvider = new InjectedWalletProvider(APP_NAME)
 
   const walletConnectProvider = new WalletConnectProvider(walletConnectParams, APP_NAME)
   const walletAggregator = new WalletAggregator([injectedWalletProvider, walletConnectProvider])

@@ -1,14 +1,19 @@
 import type { Account, BaseWallet, BaseWalletProvider, UnsubscribeFn, WalletMetadata } from '@polkadot-onboard/core'
 import { WalletType } from '@polkadot-onboard/core'
 import type { Signer } from '@polkadot/types/types'
+import { WalletConnectModal } from '@walletconnect/modal'
 import Client, { SignClient } from '@walletconnect/sign-client'
 import type { SessionTypes } from '@walletconnect/types'
 
 import { WalletConnectSigner } from './signer.js'
-import { ConnectionModal, WalletConnectConfiguration, WcAccount } from './types.js'
-import { JOYSTREAM_CHAIN_ID, POLKADOT_CHAIN_ID, WC_VERSION } from './consts'
+import type { WalletConnectConfiguration, WcAccount } from './types.js'
+import { POLKADOT_CHAIN_ID, WC_VERSION } from './consts'
 
 const toWalletAccount = (wcAccount: WcAccount) => ({ address: wcAccount.split(':')[2] })
+
+interface ModalState {
+  open: boolean
+}
 
 class WalletConnectWallet implements BaseWallet {
   type = WalletType.WALLET_CONNECT
@@ -17,8 +22,8 @@ class WalletConnectWallet implements BaseWallet {
   config: WalletConnectConfiguration
   client: Client | undefined
   signer: Signer | undefined
-  modal?: ConnectionModal
   session: SessionTypes.Struct | undefined
+  walletConnectModal: WalletConnectModal
 
   constructor(config: WalletConnectConfiguration, appName: string) {
     if (!config.chainIds || config.chainIds.length === 0) config.chainIds = [POLKADOT_CHAIN_ID]
@@ -32,6 +37,10 @@ class WalletConnectWallet implements BaseWallet {
       iconUrl: config.metadata?.icons[0] || '',
       version: WC_VERSION,
     }
+    this.walletConnectModal = new WalletConnectModal({
+      projectId: config.projectId,
+      chains: config.chainIds,
+    })
   }
 
   reset(): void {
@@ -108,20 +117,20 @@ class WalletConnectWallet implements BaseWallet {
     if (lastSession) {
       return new Promise<void>((resolve) => {
         this.session = lastSession
-        this.signer = new WalletConnectSigner(this.client!, lastSession, JOYSTREAM_CHAIN_ID)
+        this.signer = new WalletConnectSigner(this.client!, lastSession, POLKADOT_CHAIN_ID)
         resolve()
       })
     }
 
-    const { approval } = await this.client.connect(namespaces)
+    const { uri, approval } = await this.client.connect(namespaces)
 
     return new Promise<void>((resolve, reject) => {
-      if (this.modal) {
-        this.modal.openModal()
+      if (uri) {
+        this.walletConnectModal.openModal({ uri })
       }
 
-      const unsubscribeModal = this.modal?.subscribeModal((state) => {
-        if (unsubscribeModal && state.open === false) {
+      const unsubscribeModal = this.walletConnectModal.subscribeModal((state: ModalState) => {
+        if (state.open === false) {
           unsubscribeModal()
           resolve()
         }
@@ -130,14 +139,14 @@ class WalletConnectWallet implements BaseWallet {
       approval()
         .then((session) => {
           this.session = session
-          this.signer = new WalletConnectSigner(this.client!, session, JOYSTREAM_CHAIN_ID)
+          this.signer = new WalletConnectSigner(this.client!, session, POLKADOT_CHAIN_ID)
 
           resolve()
         })
         .catch((error) => {
           reject(error)
         })
-        .finally(() => this.modal?.closeModal())
+        .finally(() => this.walletConnectModal.closeModal())
     })
   }
 
