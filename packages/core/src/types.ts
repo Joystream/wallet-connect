@@ -15,6 +15,13 @@ export enum WalletType {
   LEDGER = 'LEDGER',
 }
 
+export enum WalletStatus {
+  Unknown = 'unknown',
+  Connected = 'connected',
+  Disconnected = 'disconnected',
+  Pending = 'pending',
+}
+
 export interface BaseWalletProvider {
   getWallets: () => Promise<BaseWallet[]>
 }

@@ -28,5 +28,9 @@
     "@polkadot/types": "10.9.1",
     "prettier": "3.1.0",
     "typescript": "5.2.2"
+  },
+  "dependencies": {
+    "localforage": "^1.10.0",
+    "valtio": "^1.13.2"
   }
 }

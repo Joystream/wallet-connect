@@ -1,0 +1,1 @@
+import {WalletManager} from '@polkadot-onboard/core';

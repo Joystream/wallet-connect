@@ -15,7 +15,7 @@ function isWeb3Injected(injectedWindow: InjectedWindow): boolean {
   )
 }
 
-class InjectedWallet implements BaseWallet {
+export class InjectedWallet implements BaseWallet {
   type = WalletType.INJECTED
   extension: WalletExtension
   appName: string

@@ -4,7 +4,7 @@ import { BaseWallet } from '@polkadot-onboard/core'
 import Wallet from './Wallet'
 
 const Wallets = () => {
-  const { wallets } = useWallets()
+  const { wallets, currentWalletName } = useWallets()
 
   if (!Array.isArray(wallets)) {
     return null
@@ -16,6 +16,7 @@ const Wallets = () => {
       {wallets.map((wallet: BaseWallet) => (
         <Wallet key={wallet.metadata.title} wallet={wallet} />
       ))}
+      Current wallet: {currentWalletName}
     </div>
   )
 }

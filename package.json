@@ -28,7 +28,6 @@
     "publish:react": "yarn workspace @polkadot-onboard/react npm publish --access public",
     "publish:workspace": "yarn publish:core && yarn publish:injected-wallets && yarn publish:wallet-connect && yarn publish:react",
     "start:react-headless": "yarn build:workspace && cd examples/react-headless && yarn start",
-    "start:react-next": "yarn build:workspace && cd examples/react-next && yarn dev",
     "format": "prettier --write \"./{examples,packages}/**/*.{ts,tsx}\""
   },
   "packageManager": "yarn@3.3.1",

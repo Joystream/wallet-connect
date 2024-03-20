@@ -19,6 +19,7 @@ export interface WalletConnectConfiguration extends SignClientTypes.Options {
   // https://github.com/WalletConnect/walletconnect-monorepo/pull/3435
   projectId: string
   chainIds?: PolkadotNamespaceChainId[]
+  relayUrl?: string
   optionalChainIds?: PolkadotNamespaceChainId[]
   onSessionDelete?: () => void
 }

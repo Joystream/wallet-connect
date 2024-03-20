@@ -15,7 +15,7 @@ interface ModalState {
   open: boolean
 }
 
-class WalletConnectWallet implements BaseWallet {
+export class WalletConnectWallet implements BaseWallet {
   type = WalletType.WALLET_CONNECT
   appName: string
   metadata: WalletMetadata

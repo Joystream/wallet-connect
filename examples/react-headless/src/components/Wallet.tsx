@@ -2,6 +2,7 @@ import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { BaseWallet, Account } from '@polkadot-onboard/core'
 import { formatJoystreamAddress, unitToPlanck } from '../utils/utils'
+import { useWallets } from '@polkadot-onboard/react'
 
 interface SendTransactionData {
   senderAddress: string
@@ -9,21 +10,15 @@ interface SendTransactionData {
 }
 
 const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
-  const [connected, setConnected] = useState(false)
-  const [accounts, setAccounts] = useState<Account[]>([])
+  // const [connected, setConnected] = useState(false)
+  // const [accounts, setAccounts] = useState<Account[]>([])
   const [api, setApi] = useState<ApiPromise | null>(null)
-  const [isBusy, setIsBusy] = useState<boolean>(false)
+  // const [isBusy, setIsBusy] = useState<boolean>(false)
 
-  console.log(wallet)
-  const accountsWithWallet = accounts.map((account: any) => {
-    return {
-      ...account,
-      address: formatJoystreamAddress(account.address),
-      source: wallet.metadata.title as string,
-      wallet: wallet,
-      signer: wallet.signer,
-    }
-  })
+  const { walletManager, currentWalletName } = useWallets()
+  const isSelected = wallet.metadata.id === currentWalletName
+  const connected = walletManager?.currentWalletStatus === 'connected'
+  const accountsWithWallet: Account[] = walletManager?.walletAccounts
 
   useEffect(() => {
     const setupApi = async () => {
@@ -36,32 +31,19 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
     setupApi()
   }, [])
 
-  const connect = useCallback(async () => {
-    if (!isBusy) {
-      setIsBusy(true)
-      try {
-        await wallet.connect()
-        setConnected(true)
-      } catch (err) {
-        console.error('Failed to connect', err)
-      }
-      setIsBusy(false)
-    }
-  }, [wallet])
-
-  useEffect(() => {
-    if (!connected) {
-      setAccounts([])
-      return () => {}
-    }
-
-    const promUnsubscribe = wallet.subscribeAccounts(setAccounts)
-
-    // unsubscribe to prevent memory leak
-    return () => {
-      promUnsubscribe.then((unsub) => unsub())
-    }
-  }, [connected, wallet])
+  // useEffect(() => {
+  //   if (!connected) {
+  //     setAccounts([])
+  //     return () => {}
+  //   }
+  //
+  //   const promUnsubscribe = wallet.subscribeAccounts(setAccounts)
+  //
+  //   // unsubscribe to prevent memory leak
+  //   return () => {
+  //     promUnsubscribe.then((unsub) => unsub())
+  //   }
+  // }, [connected, wallet])
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -85,10 +67,15 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
     [api, wallet]
   )
 
+  const handleConnect = useCallback(async () => {
+    const walletAccs = await walletManager?.initWallet(wallet.metadata.id)
+    console.log('accs', walletAccs)
+  }, [walletManager, wallet])
+
   return (
     <div style={{ marginBottom: '20px' }}>
-      <button onClick={connect}>{`${wallet.metadata.title} ${wallet.metadata.version || ''}`}</button>
-      {accountsWithWallet.length > 0 &&
+      <button onClick={handleConnect}>{`${wallet.metadata.title} ${wallet.metadata.version || ''}`}</button>
+      {isSelected && accountsWithWallet.length > 0 &&
         accountsWithWallet.map(({ address, name = '' }) => (
           <form key={address} onSubmit={handleSubmit} style={{ marginBottom: '10px' }}>
             <div>

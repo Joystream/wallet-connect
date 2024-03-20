@@ -1,0 +1,1 @@
+export const JOYSTREAM_SS58_PREFIX = 126

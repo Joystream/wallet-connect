@@ -1,7 +1,6 @@
 import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react'
-import { WalletAggregator } from '@polkadot-onboard/core'
-import { InjectedWalletProvider } from '@polkadot-onboard/injected-wallets'
-import { WalletConnectProvider, WalletConnectConfiguration } from '@polkadot-onboard/wallet-connect'
+import { WalletManager } from '@polkadot-onboard/core'
+import { WalletConnectConfiguration } from '@polkadot-onboard/wallet-connect'
 import { useState } from 'react'
 
 import Wallets from './Wallets'
@@ -9,7 +8,6 @@ import Wallets from './Wallets'
 const APP_NAME = 'Joystream Demo app'
 
 const App = () => {
-
   const walletConnectParams: WalletConnectConfiguration = {
     projectId: '33b2609463e399daee8c51726546c8dd',
     relayUrl: 'wss://relay.walletconnect.com',
@@ -26,14 +24,16 @@ const App = () => {
     },
   }
 
-  const injectedWalletProvider = new InjectedWalletProvider(APP_NAME)
+  const walletManager = new WalletManager('test', walletConnectParams)
 
-  const walletConnectProvider = new WalletConnectProvider(walletConnectParams, APP_NAME)
-  const walletAggregator = new WalletAggregator([injectedWalletProvider, walletConnectProvider])
   const [showWallets, setShowWallets] = useState(false)
 
   return (
-    <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
+    <PolkadotWalletsContextProvider
+      walletManager={walletManager}
+      appName={APP_NAME}
+      walletConnectParams={walletConnectParams}
+    >
       <button
         onClick={() => {
           setShowWallets(true)

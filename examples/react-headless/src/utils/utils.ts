@@ -1,5 +1,5 @@
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto'
-import { JOYSTREAM_SS58_PREFIX } from '@polkadot-onboard/wallet-connect'
+import { JOYSTREAM_SS58_PREFIX } from '@polkadot-onboard/core'
 export const formatJoystreamAddress = (address: string) => {
   const publicKey = decodeAddress(address)
   return encodeAddress(publicKey, JOYSTREAM_SS58_PREFIX)
