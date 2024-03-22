@@ -1,4 +1,6 @@
 import type { Signer } from '@polkadot/types/types'
+import { InjectedWallet } from '@polkadot-onboard/injected-wallets'
+import { WalletConnectConfiguration, WalletConnectWallet } from '@polkadot-onboard/wallet-connect'
 
 export type KeypairType = 'ed25519' | 'sr25519'
 
@@ -48,3 +50,13 @@ export interface BaseWallet {
   getAccounts: () => Promise<Account[]>
   subscribeAccounts: (cb: (accounts: Account[]) => void) => Promise<UnsubscribeFn>
 }
+
+export type SignerWallet = BaseWallet | InjectedWallet | WalletConnectWallet
+
+export type WalletManagerParams = {
+  appName: string
+  wcConfig?: WalletConnectConfiguration
+  chainNodeUrl?: string
+}
+
+export const isInjectedWallet = (wallet: SignerWallet): wallet is InjectedWallet => wallet.type === WalletType.INJECTED

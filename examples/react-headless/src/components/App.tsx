@@ -1,5 +1,5 @@
 import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react'
-import { WalletManager } from '@polkadot-onboard/core'
+import { DEFAULT_NODE_URL, WalletManager } from '@polkadot-onboard/core'
 import { WalletConnectConfiguration } from '@polkadot-onboard/wallet-connect'
 import { useState } from 'react'
 
@@ -18,13 +18,17 @@ const App = () => {
       icons: ['https://walletconnect.com/walletconnect-logo.png'],
     },
     chainIds: ['polkadot:6b5e488e0fa8f9821110d5c13f4c468a'],
-    optionalChainIds: [],
+    optionalChainIds: ['polkadot:6b5e488e0fa8f9821110d5c13f4c468a'],
     onSessionDelete: () => {
       // do something when session is removed
     },
   }
 
-  const walletManager = new WalletManager('test', walletConnectParams)
+  const walletManager = new WalletManager({
+    appName: 'test',
+    wcConfig: walletConnectParams,
+    chainNodeUrl: DEFAULT_NODE_URL,
+  })
 
   const [showWallets, setShowWallets] = useState(false)
 

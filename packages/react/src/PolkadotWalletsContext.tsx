@@ -40,7 +40,6 @@ export const PolkadotWalletsContextProvider = ({
 }: PolkadotWalletsContextProviderProps) => {
   const [wallets, setWallets] = useState<BaseWallet[] | undefined>()
   const [curWName, setCurrentWalletName] = useState<string | undefined>(walletManager.currentWalletName)
-  console.log('context state val:', curWName)
 
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
@@ -49,7 +48,6 @@ export const PolkadotWalletsContextProvider = ({
     }, initialWaitMs)
 
     const setWalletName = (walletName: string) => {
-      console.log('func used', walletName)
       setCurrentWalletName(walletName)
     }
 
@@ -62,11 +60,6 @@ export const PolkadotWalletsContextProvider = ({
   }, [walletManager])
 
   const contextData = useMemo(() => {
-    console.log('new val', {
-      wallets,
-      walletManager,
-      currentWalletName: curWName,
-    })
     return {
       wallets,
       walletManager,

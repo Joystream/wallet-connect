@@ -1,7 +1,7 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { ApiPromise, WsProvider } from '@polkadot/api'
 import { BaseWallet, Account } from '@polkadot-onboard/core'
-import { formatJoystreamAddress, unitToPlanck } from '../utils/utils'
+import { unitToPlanck } from '../utils/utils'
 import { useWallets } from '@polkadot-onboard/react'
 
 interface SendTransactionData {
@@ -17,7 +17,7 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
 
   const { walletManager, currentWalletName } = useWallets()
   const isSelected = wallet.metadata.id === currentWalletName
-  const connected = walletManager?.currentWalletStatus === 'connected'
+  // const connected = walletManager?.currentWalletStatus === 'connected'
   const accountsWithWallet: Account[] = walletManager?.walletAccounts
 
   useEffect(() => {
@@ -30,20 +30,6 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
 
     setupApi()
   }, [])
-
-  // useEffect(() => {
-  //   if (!connected) {
-  //     setAccounts([])
-  //     return () => {}
-  //   }
-  //
-  //   const promUnsubscribe = wallet.subscribeAccounts(setAccounts)
-  //
-  //   // unsubscribe to prevent memory leak
-  //   return () => {
-  //     promUnsubscribe.then((unsub) => unsub())
-  //   }
-  // }, [connected, wallet])
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -68,8 +54,7 @@ const Wallet = ({ wallet }: { wallet: BaseWallet }) => {
   )
 
   const handleConnect = useCallback(async () => {
-    const walletAccs = await walletManager?.initWallet(wallet.metadata.id)
-    console.log('accs', walletAccs)
+     await walletManager?.initWallet(wallet.metadata.id)
   }, [walletManager, wallet])
 
   return (

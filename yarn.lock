@@ -1801,6 +1801,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@polkadot-onboard/joystream@workspace:packages/joystream":
+  version: 0.0.0-use.local
+  resolution: "@polkadot-onboard/joystream@workspace:packages/joystream"
+  dependencies:
+    "@polkadot-onboard/core": 1.1.0
+    "@polkadot/extension-inject": 0.46.5
+    "@polkadot/types": 10.9.1
+    prettier: 3.1.0
+    typescript: 5.2.2
+  languageName: unknown
+  linkType: soft
+
 "@polkadot-onboard/react@1.1.0, @polkadot-onboard/react@workspace:packages/react":
   version: 0.0.0-use.local
   resolution: "@polkadot-onboard/react@workspace:packages/react"
